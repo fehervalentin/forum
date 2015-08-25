@@ -1,6 +1,7 @@
 package net.servlets;
 
 import forum.SingletonForum;
+import forum.entity.Comment;
 import forum.entity.Topic;
 import forum.entity.User;
 import java.io.IOException;
@@ -20,13 +21,15 @@ public class HomeServlet extends HttpServlet {
     private final String nicknameField = "Készítő: <input type=\"text\" name=\"nickname\">";
     private final String titleField = "Topik neve: <input type=\"text\" name=\"title\">";
     private final String descriptionField = "Topik leírása: <input type=\"text\" name=\"description\" />";
+    private final String contentField = "Tartalom: <input type=\"text\" name=\"content\">";
     private final String submitButton = "<input type=\"submit\" value=\"Submit\" />";
-    private final String topicForm = "" +
-            "<form action=\"/Forum/home\" method=\"POST\">" +
-            _break + nicknameField +
-            _break + titleField +
-            _break + descriptionField +
-            _break + submitButton + "</form>";
+    private final String topicForm = ""
+            + "<form action=\"/Forum/home/\" method=\"POST\">"
+            + _break + nicknameField
+            + _break + titleField
+            + _break + descriptionField
+            + _break + submitButton + "</form>";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -67,36 +70,73 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SingletonForum forum = SingletonForum.getInstance();
         response.setContentType("text/html;charset=UTF-8");
+        SingletonForum forum = SingletonForum.getInstance();
+        String url = request.getPathInfo();
+        StringTokenizer tokens = new StringTokenizer(url, "/");
+
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            List<Topic> topics = forum.getTopics();
-            if (topics.size() < 1) {
-                out.println("<h1>Nincsenek még tárolt topikok!</h1>");
-            } else {
-                for (Topic topic : topics) {
-                    out.println(topic.toString());
-                    out.println("<br>");
+            if (tokens.hasMoreTokens()) {
+                int id = -1;
+                try {
+                    id = Integer.valueOf(tokens.nextToken());
+                } catch (NumberFormatException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
                 }
+                Topic topic = forum.getTopics().get(id);
+                printHeader(out, topic.getTitle());
+                if (topic.getComments().size() < 1) {
+                    out.println("<h1>Nincsenek még tárolt hozzászólások!</h1>");
+                } else {
+                    for (Comment c : topic.getComments()) {
+                        out.println(topic.toString());
+                        out.println("<br>");
+                    }
+                }
+                out.println("<h1>Szólj hozzá te is!</h1>");
+                out.println("<br>");
+                out.println("<br>");
+                String commentForm = "<form action=\"/Forum/home/" + id + "\" method=\"POST\">" + contentField + _break + submitButton + "</form>";
+                out.println(commentForm);
+            } else {
+                /* TODO output your page here. You may use following sample code. */
+                printHeader(out, "Forum");
+                List<Topic> topics = forum.getTopics();
+                if (topics.size() < 1) {
+                    out.println("<h1>Nincsenek még tárolt topikok!</h1>");
+                } else {
+                    for (Topic topic : topics) {
+                        out.println(topic.toString());
+                        out.println("<br>");
+                        out.println("<a href=\"/Forum/home/" + topic.getId() + "\">" + topic.getTitle() + "</a>");
+                        out.println("<br>");
+                    }
+                }
+                out.println("<h1>Hozz létre egy új topicot!</h1>");
+                out.println("<br>");
+                out.println("<br>");
+                out.println(topicForm);
             }
-            out.println("<h1>Hozz létre egy új topicot!</h1>");
-            out.println("<br>");
-            out.println("<br>");
-            out.println(topicForm);
             out.println();
-            //out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            printFooter(out);
         }
 
         //processRequest(request, response);
+    }
+
+    private void printHeader(PrintWriter out, String title) {
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Servlet HomeServlet</title>");
+        out.println("</head>");
+        out.println("<body>");
+    }
+
+    private void printFooter(PrintWriter out) {
+        out.println("</body>");
+        out.println("</html>");
     }
 
     /**
@@ -110,13 +150,32 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String nickname = request.getParameter("nickname");
-        String title = request.getParameter("title");
-        User u = new User(nickname, "", "");
-        String description = request.getParameter("description");
-        Topic t = new Topic(title, description, u);
-        SingletonForum.getInstance().addTopic(t);
-        response.sendRedirect("/Forum/home");
+
+        SingletonForum forum = SingletonForum.getInstance();
+        String url = request.getPathInfo();
+        StringTokenizer tokens = new StringTokenizer(url, "/");
+
+        if (tokens.hasMoreTokens()) {
+            int id = -1;
+            try {
+                id = Integer.valueOf(tokens.nextToken());
+            } catch (NumberFormatException ex) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            Topic t = forum.getTopics().get(id);
+            String content = request.getParameter("content");
+            t.addComment(new Comment(t, null, content, null));
+            response.sendRedirect("/Forum/home/" + id);
+        } else {
+            String nickname = request.getParameter("nickname");
+            String title = request.getParameter("title");
+            User u = new User(nickname, "", "");
+            String description = request.getParameter("description");
+            Topic t = new Topic(title, description, u);
+            SingletonForum.getInstance().addTopic(t);
+            response.sendRedirect("/Forum/home/");
+        }
     }
 
     /**

@@ -6,6 +6,6 @@
         <title>Fórum</title>
     </head>
     <body>
-        <a href="/Forum/home">Belépés a fórumra</a>
+        <a href="/Forum/home/">Belépés a fórumra</a>
     </body>
 </html>
