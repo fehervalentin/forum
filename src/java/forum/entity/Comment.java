@@ -40,6 +40,6 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" + "id=" + id + ", topic=" + topic + ", user=" + user + ", content=" + content + ", date=" + date + ", reply=" + reply + '}';
+        return "Comment{" + "id=" + id + ", user=" + user + ", content=" + content + ", date=" + date + '}';
     }
 }

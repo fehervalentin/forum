@@ -89,8 +89,9 @@ public class HomeServlet extends HttpServlet {
                 if (topic.getComments().size() < 1) {
                     out.println("<h1>Nincsenek még tárolt hozzászólások!</h1>");
                 } else {
+                    //out.println(topic.getComments().size());
                     for (Comment c : topic.getComments()) {
-                        out.println(topic.toString());
+                        out.println(c.toString());
                         out.println("<br>");
                     }
                 }
