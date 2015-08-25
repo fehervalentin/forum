@@ -100,6 +100,7 @@ public class HomeServlet extends HttpServlet {
                 out.println("<br>");
                 String commentForm = "<form action=\"/Forum/home/" + id + "\" method=\"POST\">" + contentField + _break + submitButton + "</form>";
                 out.println(commentForm);
+                out.print("<a href=\"/Forum/home/\">Vissza</a>");
             } else {
                 /* TODO output your page here. You may use following sample code. */
                 printHeader(out, "Forum");
