@@ -107,10 +107,11 @@ public class HomeServlet extends HttpServlet {
                 if (topics.size() < 1) {
                     out.println("<h1>Nincsenek még tárolt topikok!</h1>");
                 } else {
-                    for (Topic topic : topics) {
+                    for (int i = 0; i < topics.size(); i++) {
+                        Topic topic = topics.get(i);
                         out.println(topic.toString());
                         out.println("<br>");
-                        out.println("<a href=\"/Forum/home/" + topic.getId() + "\">" + topic.getTitle() + "</a>");
+                        out.println("<a href=\"/Forum/home/" + i + "\">" + topic.getTitle() + "</a>");
                         out.println("<br>");
                     }
                 }
