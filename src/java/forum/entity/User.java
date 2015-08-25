@@ -1,4 +1,4 @@
-package entity;
+package forum.entity;
 
 import java.util.Date;
 
@@ -35,4 +35,9 @@ public class User {
     }
     
     // setter szerintem egyik adattaghoz sem kell
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", regDate=" + regDate + '}';
+    }
 }

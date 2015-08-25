@@ -1,4 +1,4 @@
-package entity;
+package forum.entity;
 
 import java.util.Date;
 
@@ -36,5 +36,10 @@ public class Comment {
 
     public long getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" + "id=" + id + ", topic=" + topic + ", user=" + user + ", content=" + content + ", date=" + date + ", reply=" + reply + '}';
     }
 }

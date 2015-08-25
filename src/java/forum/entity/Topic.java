@@ -1,4 +1,4 @@
-package entity;
+package forum.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,5 +65,10 @@ public class Topic {
     
     public void removeComment(Comment c) {
         comments.remove(c);
+    }
+
+    @Override
+    public String toString() {
+        return "Topic{" + "id=" + id + ", title=" + title + ", description=" + description + ", timestamp=" + timestamp + ", user=" + user + ", subTopics=" + subTopics + ", comments=" + comments + '}';
     }
 }
