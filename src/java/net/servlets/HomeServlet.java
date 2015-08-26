@@ -34,31 +34,30 @@ public class HomeServlet extends HttpServlet {
     static final String PASS = "";
 
     private Connection conn = null;
-    private Statement stmt = null;
 
     @Override
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
         try {
             Class.forName(JDBC_DRIVER);
-            //Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            stmt = conn.createStatement();
-            /*String sql = "select id from User";
-             ResultSet rs = stmt.executeQuery(sql);
-             while (rs.next()) {
-             out.println("lol");
-             int id = rs.getInt("id");
-             out.println(id);
-             }*/
-            //rs.close();
-            //stmt.close();
-            //conn.close();
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+    @Override
+    public void destroy() {
+        super.destroy(); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -204,6 +203,7 @@ public class HomeServlet extends HttpServlet {
             c.setId(0);
             comments.add(c);
         }
+        prep.close();
         return comments;
     }
 
@@ -211,6 +211,7 @@ public class HomeServlet extends HttpServlet {
         PreparedStatement prep = conn.prepareStatement("select * from topics where id = ?");
         prep.setInt(1, id);
         ResultSet rs = prep.executeQuery();
+        prep.close();
         if (rs.next()) {
             String title = rs.getString("title");
             String description = rs.getString("description");
@@ -226,11 +227,12 @@ public class HomeServlet extends HttpServlet {
     private String persistComment(int topicId, HttpServletRequest request) throws SQLException {
         String content = request.getParameter("content");
         if (null != conn) {
-            PreparedStatement pstmt = conn.prepareStatement("insert into comments (topic_id, user_id, content, date) values(?, 1, ?, ?)");
-            pstmt.setInt(1, topicId);
-            pstmt.setString(2, content);
-            pstmt.setLong(3, new Date().getTime());
-            pstmt.executeUpdate();
+            PreparedStatement prep = conn.prepareStatement("insert into comments (topic_id, user_id, content, date) values(?, 1, ?, ?)");
+            prep.setInt(1, topicId);
+            prep.setString(2, content);
+            prep.setLong(3, new Date().getTime());
+            prep.executeUpdate();
+            prep.close();
         }
         return "OK";
     }
@@ -240,12 +242,13 @@ public class HomeServlet extends HttpServlet {
             String nickname = request.getParameter("nickname");
             String title = request.getParameter("title");
             String description = request.getParameter("description");
-            PreparedStatement pstmt = conn.prepareStatement("insert into topics (title, description, date, user_id) values(?, ?, ?, ?)");
-            pstmt.setString(1, title);
-            pstmt.setString(2, description);
-            pstmt.setLong(3, new Date().getTime());
-            pstmt.setInt(4, 1);
-            pstmt.executeUpdate();
+            PreparedStatement prep = conn.prepareStatement("insert into topics (title, description, date, user_id) values(?, ?, ?, ?)");
+            prep.setString(1, title);
+            prep.setString(2, description);
+            prep.setLong(3, new Date().getTime());
+            prep.setInt(4, 1);
+            prep.executeUpdate();
+            prep.close();
         }
         return "OK";
     }
