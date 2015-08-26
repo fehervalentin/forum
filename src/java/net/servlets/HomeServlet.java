@@ -211,7 +211,6 @@ public class HomeServlet extends HttpServlet {
         PreparedStatement prep = conn.prepareStatement("select * from topics where id = ?");
         prep.setInt(1, id);
         ResultSet rs = prep.executeQuery();
-        prep.close();
         if (rs.next()) {
             String title = rs.getString("title");
             String description = rs.getString("description");
@@ -219,8 +218,10 @@ public class HomeServlet extends HttpServlet {
             Topic t = new Topic(title, description, getUserById(1), date);
             t.setId(id);
             t.addComments(getCommentsFromTopic(id));
+            prep.close();
             return t;
         }
+        prep.close();
         return null;
     }
 
