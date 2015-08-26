@@ -102,10 +102,12 @@ public class HomeServlet extends HttpServlet {
                 out.println(commentForm);
                 out.print("<a href=\"/Forum/home/\">Vissza</a>");
             } else {
-                /* TODO output your page here. You may use following sample code. */
-                printHeader(out, "Forum");
+                //out.println("lol");
+                //printHeader(out, "Forum");
                 List<Topic> topics = forum.getTopics();
-                if (topics.size() < 1) {
+                request.setAttribute("topics", topics);
+                request.getRequestDispatcher("/WEB-INF/jsp/pages/root/root.jsp").forward(request, response);
+                /*if (topics.size() < 1) {
                     out.println("<h1>Nincsenek még tárolt topikok!</h1>");
                 } else {
                     for (int i = 0; i < topics.size(); i++) {
@@ -119,7 +121,7 @@ public class HomeServlet extends HttpServlet {
                 out.println("<h1>Hozz létre egy új topicot!</h1>");
                 out.println("<br>");
                 out.println("<br>");
-                out.println(topicForm);
+                out.println(topicForm);*/
             }
             out.println();
             printFooter(out);
