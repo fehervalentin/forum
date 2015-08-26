@@ -28,10 +28,6 @@ public class HomeServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        StringTokenizer tokens = new StringTokenizer(request.getPathInfo(), "/");
-        try (PrintWriter out = response.getWriter()) {
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,21 +60,6 @@ public class HomeServlet extends HttpServlet {
                 request.setAttribute("topic", topic);
                 request.setAttribute("id", id);
                 request.getRequestDispatcher("/WEB-INF/jsp/pages/comment/comment.jsp").forward(request, response);
-                /*if (topic.getComments().size() < 1) {
-                    out.println("<h1>Nincsenek még tárolt hozzászólások!</h1>");
-                } else {
-                    //out.println(topic.getComments().size());
-                    for (Comment c : topic.getComments()) {
-                        out.println(c.toString());
-                        out.println("<br>");
-                    }
-                }
-                out.println("<h1>Szólj hozzá te is!</h1>");
-                out.println("<br>");
-                out.println("<br>");
-                String commentForm = "<form action=\"/Forum/home/" + id + "\" method=\"POST\">" + contentField + _break + submitButton + "</form>";
-                out.println(commentForm);
-                out.print("<a href=\"/Forum/home/\">Vissza</a>");*/
             } else {
                 request.setAttribute("topics", forum.getTopics());
                 request.getRequestDispatcher("/WEB-INF/jsp/pages/root/root.jsp").forward(request, response);
