@@ -11,17 +11,21 @@ public class User {
     private long regDate;
     // rollok is kellenek? meg kell különböztetni speciális jogkörrel rendelkező felhasználókat is? akkor guesteket (anonymous comment) is kell kezelni?
     
-    public User(String name, String password, String email) {
+    public User(String name, String password, String email, long regDate) {
         this.name = name;
         this.password = password;
         this.email = email;
-        regDate = new Date().getTime();
+        this.regDate = regDate;
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }

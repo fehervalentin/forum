@@ -9,22 +9,26 @@ public class Topic {
     private int id;
     private String title;
     private String description;
-    private float timestamp;
+    private long date;
     private User user;
     private List<Topic> subTopics; // Composite pattern
     private List<Comment> comments;
     
-    public Topic(String title, String description, User user) {
+    public Topic(String title, String description, User user, long date) {
         this.title = title;
         this.description = description;
         this.user = user;
-        timestamp = new Date().getTime();
+        this.date = date;
         subTopics = new ArrayList<>();
         comments = new ArrayList<>();
     }
 
     public int getId() { // setter nem kell, valamilyen automatizmus fogja generálni
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() { // vajon kell setter? később is meg lehessen változtatni a címet? vagy legyen setter, de csak mondjuk adminok tudják hívni? jogosultságok?! vagy közvetlenül db-ben kelljen hozzá turkálni?
@@ -35,8 +39,8 @@ public class Topic {
         return description;
     }
 
-    public float getTimestamp() { // ehhez nem kell setter (szerintem)
-        return timestamp;
+    public long getDate() { // ehhez nem kell setter (szerintem)
+        return date;
     }
 
     public User getUser() { // ehhez sem kell setter (szerintem)
@@ -63,12 +67,18 @@ public class Topic {
         comments.add(c);
     }
     
+    public void addComments(List<Comment> comments) {
+        for (Comment comment : comments) {
+            this.comments.add(comment);
+        }
+    }
+    
     public void removeComment(Comment c) {
         comments.remove(c);
     }
 
     @Override
     public String toString() {
-        return "Topic{" + "id=" + id + ", title=" + title + ", description=" + description + ", timestamp=" + timestamp + ", user=" + user + ", subTopics=" + subTopics + ", comments=" + comments + '}';
+        return "Topic{" + "id=" + id + ", title=" + title + ", description=" + description + ", timestamp=" + date + ", user=" + user + ", subTopics=" + subTopics + ", comments=" + comments + '}';
     }
 }

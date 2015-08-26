@@ -1,29 +1,25 @@
 package forum.entity;
 
-import java.util.Date;
-
 public class Comment {
     private int id;
-    private Topic topic;
     private User user;
     private String content;
     private long date;
     private Comment reply; // melyik hsz-re érkezett válasz(=ez a hsz) lehet null is, ilyenkor egy egyszerű új hsz érkezett
     
-    public Comment(Topic topic, User user, String content, Comment reply) {
-        this.topic = topic;
+    public Comment(User user, String content, Comment reply, long date) {
         this.user = user;
         this.content = content;
         this.reply = reply;
-        date = new Date().getTime();
+        this.date = date;
     }
 
     public int getId() {
         return id;
     }
 
-    public Topic getTopic() {
-        return topic;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public User getUser() {

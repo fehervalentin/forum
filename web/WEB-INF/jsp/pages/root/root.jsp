@@ -18,7 +18,7 @@
                     Topic topic = topics.get(i);
                     out.println(topic.toString());%>
                     <br>
-                    <% out.println("<a href=\"/Forum/home/" + i + "\">" + topic.getTitle() + "</a>"); %>
+                    <% out.println("<a href=\"/Forum/home/" + topics.get(i).getId() + "\">" + topic.getTitle() + "</a>"); %>
                     <br>
                     <br>
                 <%}
