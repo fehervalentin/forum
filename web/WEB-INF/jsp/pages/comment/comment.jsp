@@ -25,5 +25,6 @@
         <br>
         <br>
         <jsp:include page="commentForm.jsp"/>
+        <a href="/Forum/home/">Vissza</a>
     </body>
 </html>
