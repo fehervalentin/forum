@@ -8,6 +8,17 @@
         <title>Forum</title>
     </head>
     <body>
+        <%--<c:choose>
+            <c:when test="${1==1}">
+                <c:out value="1==1"/>
+                <c:otherwise>
+                    <c:out value="1!=1"/>
+                </c:otherwise>
+            </c:when>
+        </c:choose>
+        <c:forEach var="topic" items="">
+            
+        </c:forEach>--%>
         <%
             List<Topic> topics = (List<Topic>)request.getAttribute("topics");
             if (topics.size() < 1) {%>

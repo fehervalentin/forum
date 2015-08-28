@@ -110,6 +110,7 @@ public class HomeServlet extends HttpServlet {
             } else {
                 try {
                     request.setAttribute("topics", getTopics());
+                    //out.println("anyad");
                     request.getRequestDispatcher("/WEB-INF/jsp/pages/root/root.jsp").forward(request, response);
                 } catch (SQLException ex) {
                     out.println(ex.getMessage());
